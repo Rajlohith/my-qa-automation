@@ -108,3 +108,14 @@ playwright.config.ts      two projects: "ui" and "api"
 
 - `playwright.config.ts` has two projects. `ui` runs in Chromium with saucedemo as the base URL and `testIdAttribute: 'data-test'`, so `getByTestId` matches saucedemo's `data-test` attributes. `api` uses no browser, sets reqres.in as the base URL, and sends the `x-api-key` header on every request.
 - Assertions stay in the test files. The Page Object only performs actions.
+
+## Scope and limitations
+
+Concise to the point:
+
+- Only Chromium (no Firefox/WebKit); no CI, Docker or extra reporting tools.
+- Only `standard_user` and `locked_out_user`; no wrong-password, empty-field or other-user cases.
+- Cart tests cover a single product; no checkout, sorting or multi-item flows.
+- API tests cover only the endpoints in the brief; no schema validation. ReqRes is a fake API, so created users are not persisted.
+- Each UI test logs in through the UI (simple and independent, but slower than reusing a saved login state).
+- The API tests need a personal ReqRes key (free keys are time-limited), so they fail with 401 without one.
