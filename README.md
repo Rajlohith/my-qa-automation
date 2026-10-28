@@ -111,7 +111,7 @@ playwright.config.ts      two projects: "ui" and "api"
 
 ## Scope and limitations
 
-Concise to the point:
+Concise to the point with what is not done:
 
 - Only Chromium (no Firefox/WebKit); no CI, Docker or extra reporting tools.
 - Only `standard_user` and `locked_out_user`; no wrong-password, empty-field or other-user cases.

@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-// Scope: only the endpoints
+// Scope: only the endpoints validation
 
 
 test('GET /api/users/2 returns the user with an email', async ({ request }) => {
@@ -9,7 +9,7 @@ test('GET /api/users/2 returns the user with an email', async ({ request }) => {
   expect(response.status()).toBe(200);
   const body = await response.json(); // reading the body is async, so is awaited
   
-  expect(body.data.email).toBeTruthy()
+  expect(body.data.email).toBeTruthy();
 });
 
 test('POST /api/users creates a user named morpheus', async ({ request }) => {

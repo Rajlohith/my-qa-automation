@@ -14,7 +14,7 @@ test('standard user can log in and sees the Products title', async ({ page }) =>
   await expect(page.getByTestId('title')).toHaveText('Products');
 });
 
-// invalid credentials for login
+  // locked out account: login must be refused with an error
 test('locked out user sees an error', async ({ page }) => {
   const loginPage = new LoginPage(page);
   await loginPage.goto();

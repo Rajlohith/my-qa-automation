@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 import dotenv from 'dotenv';
 
-// to load ResReq Api using that .env file
+// to load ReqRes Api key using that .env file
 dotenv.config({ quiet: true });
 
 export default defineConfig({
@@ -25,7 +25,7 @@ export default defineConfig({
       },
     },
     {
-      // api key test
+      // test for reqres.in with HTTP
       name: 'api',
       testDir: './tests/api',
       use: {
