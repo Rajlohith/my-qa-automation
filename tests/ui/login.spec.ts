@@ -16,3 +16,14 @@ test('locked out user sees an error', async ({ page }) => {
 
   await expect(page.getByTestId('error')).toContainText('locked out');
 });
+
+test('user can log out from the side menu and returns to the login page', async ({ page }) => {
+  const loginPage = new LoginPage(page);
+  await loginPage.loginAsStandardUser();
+
+  await page.getByRole('button', { name: 'Open Menu' }).click();
+  await page.getByTestId('logout-sidebar-link').click();
+
+  await expect(page).toHaveURL('/');
+  await expect(page.getByTestId('login-button')).toBeVisible();
+});
