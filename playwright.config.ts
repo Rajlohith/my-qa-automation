@@ -6,8 +6,8 @@ dotenv.config({ quiet: true });
 
 export default defineConfig({
   testDir: './tests',
-  fullyParallel: true,
-  forbidOnly: !!process.env.CI,
+  fullyParallel: true, // tests are independent
+  forbidOnly: !!process.env.CI, 
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: [['html', { open: 'never' }]],
@@ -20,7 +20,7 @@ export default defineConfig({
       use: {
         ...devices['Desktop Chrome'],
         baseURL: 'https://www.saucedemo.com',
-        testIdAttribute: 'data-test',
+        testIdAttribute: 'data-test', // saucedemo with data-test, but Playwright default data-testid
         trace: 'on-first-retry',
       },
     },
@@ -31,7 +31,7 @@ export default defineConfig({
       use: {
         baseURL: 'https://reqres.in',
         extraHTTPHeaders: {
-          'x-api-key': process.env.REQRES_API_KEY ?? '',
+          'x-api-key': process.env.REQRES_API_KEY ?? '',  // sent every API request
         },
       },
     },

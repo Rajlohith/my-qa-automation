@@ -1,10 +1,13 @@
 import { test, expect } from '@playwright/test';
 
+// Scope: only the endpoints
+
+
 test('GET /api/users/2 returns the user with an email', async ({ request }) => {
   const response = await request.get('/api/users/2');
 
   expect(response.status()).toBe(200);
-  const body = await response.json();
+  const body = await response.json(); // reading the body is async, so is awaited
   
   expect(body.data.email).toEqual(
     expect.stringMatching(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)
@@ -21,6 +24,7 @@ test('POST /api/users creates a user named morpheus', async ({ request }) => {
   expect(body.name).toBe('morpheus');
 });
 
+// Bonus: a missing user must return 404
 test('GET /api/users/23 returns 404 for a user that does not exist', async ({ request }) => {
   const response = await request.get('/api/users/23');
 
