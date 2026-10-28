@@ -36,33 +36,33 @@ npx playwright install --with-deps chromium
 The API tests need a free ReqRes API key (without it ReqRes returns 401).
 
 1. Create a free account at https://reqres.in and generate an API key.
-2. Create a file named `.env` in the project root. Replace `your_key_here` with your key.
+2. Copy the template file `.env.example` to a new file named `.env` (in the project root, next to `package.json`):
 
 **Windows (Command Prompt):**
 
 ```cmd
-echo REQRES_API_KEY=your_key_here> .env
+copy .env.example .env
 ```
 
 **Windows (PowerShell):**
 
 ```powershell
-Set-Content -Path .env -Value "REQRES_API_KEY=your_key_here"
+Copy-Item .env.example .env
 ```
 
 **macOS and Linux (Terminal):**
 
 ```bash
-echo "REQRES_API_KEY=your_key_here" > .env
+cp .env.example .env
 ```
 
-Or create `.env` in any text editor with this single line:
+3. Open `.env` in any text editor and replace `your_key_here` with your key:
 
 ```
 REQRES_API_KEY=your_key_here
 ```
 
-`.env` is listed in `.gitignore`, so the key is never committed.
+`.env` is listed in `.gitignore`, so your real key is never committed. `.env.example` is only a template.
 
 ## Run the tests
 
