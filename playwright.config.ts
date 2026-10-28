@@ -1,5 +1,8 @@
 import { defineConfig, devices } from '@playwright/test';
+import dotenv from 'dotenv';
 
+
+dotenv.config();
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
@@ -66,6 +69,29 @@ export default defineConfig({
     //   name: 'Google Chrome',
     //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
     // },
+
+    {
+      // Browser tests against saucedemo
+      name: 'ui',
+      testDir: './tests/ui',
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: 'https://www.saucedemo.com',
+        testIdAttribute: 'data-test',
+        trace: 'on-first-retry',
+      },
+    },
+    {
+      // HTTP tests against reqres.in (no browser)
+      name: 'api',
+      testDir: './tests/api',
+      use: {
+        baseURL: 'https://reqres.in',
+        extraHTTPHeaders: {
+          'x-api-key': process.env.REQRES_API_KEY ?? '',
+        },
+      },
+    },
   ],
 
   /* Run your local dev server before starting the tests */
