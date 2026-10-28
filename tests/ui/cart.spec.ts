@@ -9,3 +9,15 @@ test('adding a product shows 1 on the cart badge', async ({ page }) => {
 
   await expect(page.getByTestId('shopping-cart-badge')).toHaveText('1');
 });
+
+test('removing the product makes the cart badge disappear', async ({ page }) => {
+  const loginPage = new LoginPage(page);
+  await loginPage.loginAsStandardUser();
+
+  await page.getByTestId('add-to-cart-sauce-labs-backpack').click();
+  await expect(page.getByTestId('shopping-cart-badge')).toHaveText('1');
+
+  await page.getByTestId('remove-sauce-labs-backpack').click();
+
+  await expect(page.getByTestId('shopping-cart-badge')).toHaveCount(0);
+});
