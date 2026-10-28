@@ -1,19 +1,18 @@
 import { test, expect } from '@playwright/test';
+import { LoginPage } from '../../pages/LoginPage';
 
 test('standard user can log in and sees the Products title', async ({ page }) => {
-  await page.goto('/');
-  await page.getByTestId('username').fill('standard_user');
-  await page.getByTestId('password').fill('secret_sauce');
-  await page.getByTestId('login-button').click();
+  const loginPage = new LoginPage(page);
+  await loginPage.goto();
+  await loginPage.login('standard_user', 'secret_sauce');
 
   await expect(page.getByTestId('title')).toHaveText('Products');
 });
 
 test('locked out user sees an error', async ({ page }) => {
-  await page.goto('/');
-  await page.getByTestId('username').fill('locked_out_user');
-  await page.getByTestId('password').fill('secret_sauce');
-  await page.getByTestId('login-button').click();
+  const loginPage = new LoginPage(page);
+  await loginPage.goto();
+  await loginPage.login('locked_out_user', 'secret_sauce');
 
   await expect(page.getByTestId('error')).toContainText('locked out');
 });

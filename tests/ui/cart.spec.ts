@@ -1,10 +1,9 @@
 import { test, expect } from '@playwright/test';
+import { LoginPage } from '../../pages/LoginPage';
 
 test('adding a product shows 1 on the cart badge', async ({ page }) => {
-  await page.goto('/');
-  await page.getByTestId('username').fill('standard_user');
-  await page.getByTestId('password').fill('secret_sauce');
-  await page.getByTestId('login-button').click();
+  const loginPage = new LoginPage(page);
+  await loginPage.loginAsStandardUser();
 
   await page.getByTestId('add-to-cart-sauce-labs-backpack').click();
 
