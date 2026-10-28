@@ -8,3 +8,12 @@ test('standard user can log in and sees the Products title', async ({ page }) =>
 
   await expect(page.getByTestId('title')).toHaveText('Products');
 });
+
+test('locked out user sees an error', async ({ page }) => {
+  await page.goto('/');
+  await page.getByTestId('username').fill('locked_out_user');
+  await page.getByTestId('password').fill('secret_sauce');
+  await page.getByTestId('login-button').click();
+
+  await expect(page.getByTestId('error')).toContainText('locked out');
+});
