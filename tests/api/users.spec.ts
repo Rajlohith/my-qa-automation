@@ -5,7 +5,10 @@ test('GET /api/users/2 returns the user with an email', async ({ request }) => {
 
   expect(response.status()).toBe(200);
   const body = await response.json();
-  expect(body.data.email).toBeTruthy();
+  
+  expect(body.data.email).toEqual(
+    expect.stringMatching(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)
+  );
 });
 
 test('POST /api/users creates a user named morpheus', async ({ request }) => {
