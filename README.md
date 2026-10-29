@@ -7,7 +7,18 @@ Automated tests for two demo sites:
 
 ## Setup
 
-### 1. Install Node.js (version 18 or newer)
+### 1. Get the code (clone the repository)
+
+Install [Git](https://git-scm.com) if you do not have it, then run:
+
+```bash
+git clone https://github.com/Rajlohith/my-qa-automation.git
+cd my-qa-automation
+```
+
+These commands are the same on Windows, macOS and Linux. All remaining commands are run from inside this `my-qa-automation` folder. (No Git? Use the green **Code** button on the GitHub page, choose **Download ZIP**, unzip it and open a terminal in that folder.)
+
+### 2. Install Node.js (version 18 or newer)
 
 Download the LTS version from https://nodejs.org (Windows, macOS and Linux installers are available), then check it:
 
@@ -16,7 +27,7 @@ node -v
 npm -v
 ```
 
-### 2. Install dependencies and the Chromium browser
+### 3. Install dependencies and the Chromium browser
 
 These commands are the same on Windows, macOS and Linux. Run them in the project folder:
 
@@ -31,7 +42,7 @@ On Linux, if the browser fails to start because of missing system libraries, run
 npx playwright install --with-deps chromium
 ```
 
-### 3. Create the `.env` file with your ReqRes API key
+### 4. Create the `.env` file with your ReqRes API key
 
 The API tests need a free ReqRes API key (without it ReqRes returns 401).
 
@@ -70,7 +81,7 @@ REQRES_API_KEY=your_key_here
 npx playwright test                 # all 8 tests
 npx playwright test --project=ui    # UI tests only
 npx playwright test --project=api   # API tests only
-npx playwright test --headed        # watch the browser manually doing tests
+npx playwright test --headed        # watch the browser run the tests
 npx playwright show-report          # open the HTML report
 ```
 
@@ -90,10 +101,10 @@ npx playwright show-report          # open the HTML report
 
 | Test | File |
 |------|------|
-| removing from cart, badge disappears | tests/ui/cart.spec.ts |
-| to check using logout of side menu returns to the login page | tests/ui/login.spec.ts |
-| doing GET method on /api/users/23 returns 404 | tests/api/users.spec.ts |
-| login steps moved into a Page Object | pages/LoginPage.ts |
+| Remove from cart, badge disappears | tests/ui/cart.spec.ts |
+| Logout from the side menu returns to the login page | tests/ui/login.spec.ts |
+| GET /api/users/23 returns 404 | tests/api/users.spec.ts |
+| Login steps moved into a Page Object | pages/LoginPage.ts |
 
 ## Project structure
 
@@ -102,6 +113,7 @@ pages/LoginPage.ts        Page Object for the login steps
 tests/ui/                 browser tests (saucedemo)
 tests/api/                HTTP tests (reqres.in)
 playwright.config.ts      two projects: "ui" and "api"
+.env.example              template for the API key file (copy to .env)
 ```
 
 ## Notes
@@ -111,7 +123,7 @@ playwright.config.ts      two projects: "ui" and "api"
 
 ## Scope and limitations
 
-Concise to the point with what is not done:
+Kept small on purpose, as per documentation. Not done:
 
 - Only Chromium (no Firefox/WebKit); no CI, Docker or extra reporting tools.
 - Only `standard_user` and `locked_out_user`; no wrong-password, empty-field or other-user cases.
@@ -119,3 +131,13 @@ Concise to the point with what is not done:
 - API tests cover only the endpoints in the brief; no schema validation. ReqRes is a fake API, so created users are not persisted.
 - Each UI test logs in through the UI (simple and independent, but slower than reusing a saved login state).
 - The API tests need a personal ReqRes key (free keys are time-limited), so they fail with 401 without one.
+
+## Reflection
+
+**What I completed:** All five required scenarios plus all four bonus tasks.
+
+**Where I got stuck:** My first test failed with an "invalid URL" error because the `baseURL` line was still commented out in `playwright.config.ts`. Once I set it, `page.goto('/')` worked. I checked that the 404 test really tests something by temporarily using an existing user id and watching it fail.
+
+**What I learned:** How Playwright fixtures, auto-waiting assertions and async/await work, and why an API key would belong in the .gitignore `.env` file.
+
+**What I would improve with more time:** Add a shared logged-in fixture to avoid repeating the UI login, cover more users and negative cases, and run the suite in CI.
