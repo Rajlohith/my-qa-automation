@@ -44,7 +44,7 @@ npx playwright install --with-deps chromium
 
 ### 4. Create the `.env` file with your ReqRes API key
 
-The API tests need a free ReqRes API key (without it ReqRes returns 401).
+The API tests use a free ReqRes API key. ReqRes may return 401 without one. (When I tested, the three endpoints also worked without a key, but this can change.)
 
 1. Create a free account at https://reqres.in and generate an API key.
 2. Copy the template file `.env.example` to a new file named `.env` (in the project root, next to `package.json`):
@@ -126,17 +126,30 @@ npx playwright show-report          # open the HTML report
 
 ## Project structure
 
+```bash
+.
+|-- pages/
+|   |-- LoginPage.ts          # Page Object for the login steps
+|-- tests/
+|   |-- api/
+|   |   |-- users.spec.ts     # GET user 2, POST user, GET user 23 (reqres.in)
+|   |-- ui/
+|       |-- cart.spec.ts      # add to cart, remove from cart (saucedemo)
+|       |-- login.spec.ts     # login, locked out user, logout (saucedemo)
+|-- .env.example              # template for the API key file (copy to .env)
+|-- .gitignore                # keeps .env, node_modules and reports out of Git
+|-- package.json              # dependencies and the npm test script
+|-- package-lock.json         # exact dependency versions (created by npm install)
+|-- playwright.config.ts      # two projects: "ui" and "api"
+|-- tsconfig.json             # TypeScript settings (editor type checking)
+|-- README.md
 ```
-pages/LoginPage.ts        Page Object for the login steps
-tests/ui/                 browser tests (saucedemo)
-tests/api/                HTTP tests (reqres.in)
-playwright.config.ts      two projects: "ui" and "api"
-.env.example              template for the API key file (copy to .env)
-```
+
+`.env` (your own API key), `node_modules/`, `playwright-report/` and `test-results/` are created locally and are not committed.
 
 ## Notes
 
-- `playwright.config.ts` has two projects. `ui` runs in Chromium with saucedemo as the base URL and `testIdAttribute: 'data-test'`, so `getByTestId` matches saucedemo's `data-test` attributes. `api` uses no browser, sets reqres.in as the base URL, and sends the `x-api-key` header on every request.
+- `playwright.config.ts` has two projects. `ui` runs in Chromium with saucedemo as the base URL and `testIdAttribute: 'data-test'`, so `getByTestId` matches saucedemo's `data-test` attributes. `api` uses no browser, sets reqres.in as the base URL, and sends the `x-api-key` header on every request when `REQRES_API_KEY` is set.
 - Assertions stay in the test files. The Page Object only performs actions.
 
 ## Scope and limitations
@@ -148,7 +161,7 @@ Kept small on purpose, as per documentation. Not done:
 - Cart tests cover a single product; no checkout, sorting or multi-item flows.
 - API tests cover only the endpoints in the brief; no schema validation. ReqRes is a fake API, so created users are not persisted.
 - Each UI test logs in through the UI (simple and independent, but slower than reusing a saved login state).
-- The API tests need a personal ReqRes key (free keys are time-limited), so they fail with 401 without one.
+- The API tests use a personal ReqRes key (free keys are time-limited). ReqRes may return 401 without one.
 
 ## Reflection
 
@@ -156,6 +169,6 @@ Kept small on purpose, as per documentation. Not done:
 
 **Where I got stuck:** My first test failed with an "invalid URL" error because the `baseURL` line was still commented out in `playwright.config.ts`. Once I set it, `page.goto('/')` worked. I checked that the 404 test really tests something by temporarily using an existing user id and watching it fail.
 
-**What I learned:** How Playwright fixtures, auto-waiting assertions and async/await work, and why an API key would belong in the .gitignore `.env` file.
+**What I learned:** How Playwright fixtures, auto-waiting assertions and async/await work, and why an API key belongs in a gitignored `.env` file instead of the code.
 
 **What I would improve with more time:** Add a shared logged-in fixture to avoid repeating the UI login, cover more users and negative cases, and run the suite in CI.
