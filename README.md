@@ -75,6 +75,24 @@ REQRES_API_KEY=your_key_here
 
 `.env` is listed in `.gitignore`, so your real key is never committed. `.env.example` is only a template.
 
+## API Key Handling
+
+The Playwright configuration loads environment variables from the `.env` file using `dotenv`.
+
+The API project conditionally adds the `x-api-key` HTTP header:
+
+- If `REQRES_API_KEY` is configured, the key is trimmed and included in API requests.
+- If the key is missing, no empty API-key header is sent.
+- The API test file checks for a missing key using `test.beforeAll()` and displays a warning explaining how to configure it.
+
+The API tests still run if the key is missing, but ReqRes may reject requests with `401 Unauthorized`.
+
+UI tests do not require a ReqRes API key and can run independently:
+
+```bash
+npx playwright test --project=ui
+```
+
 ## Run the tests
 
 ```bash

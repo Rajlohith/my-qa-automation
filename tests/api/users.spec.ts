@@ -1,5 +1,13 @@
 import { test, expect } from '@playwright/test';
 
+test.beforeAll(() => {
+  if (!process.env.REQRES_API_KEY?.trim()) {
+    console.warn(
+      'REQRES_API_KEY is not set; API tests may return 401. Copy .env.example to .env and add your ReqRes key.'
+    );
+  }
+});
+
 // Scope: only the endpoints validation
 
 

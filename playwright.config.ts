@@ -4,6 +4,8 @@ import dotenv from 'dotenv';
 // to load ReqRes Api key using that .env file
 dotenv.config({ quiet: true });
 
+const apiKey = process.env.REQRES_API_KEY?.trim();
+
 export default defineConfig({
   testDir: './tests',
   fullyParallel: true, // tests are independent
@@ -30,9 +32,8 @@ export default defineConfig({
       testDir: './tests/api',
       use: {
         baseURL: 'https://reqres.in',
-        extraHTTPHeaders: {
-          'x-api-key': process.env.REQRES_API_KEY ?? '',  // sent every API request
-        },
+        // send the key on every API request, only when one is set
+        extraHTTPHeaders: apiKey ? { 'x-api-key': apiKey } : {},
       },
     },
   ],
